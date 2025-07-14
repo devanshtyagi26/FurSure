@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "PopcornPick",
-  description: "Get best recommended movies",
+  title: "FurSure",
+  description: "Differentiate between cat and dog",
 };
 
 export default function RootLayout({ children }) {
