@@ -13,16 +13,14 @@ export const predict = async (file) => {
   const formData = new FormData();
   formData.append("file", file); // ✅ field name must match the backend
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   try {
-    const response = await axios.post(
-      "http://127.0.0.1:8000/predict",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(`${apiUrl}/predict`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error) {
