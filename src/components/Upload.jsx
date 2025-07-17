@@ -12,6 +12,7 @@ const UploadImage = () => {
   const [result, setResult] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -50,12 +51,22 @@ const UploadImage = () => {
     try {
       const prediction = await predict(file);
       setResult(prediction);
+      setReset(true);
     } catch (err) {
       setResult("Prediction failed");
       console.error(err);
     } finally {
       setLoading(false);
     }
+  };
+  const handleReset = (e) => {
+    setReset(false);
+    setFileName("");
+    setFile(null);
+    setReset(false);
+    setPreview(null);
+    setLoading(false);
+    setResult(null);
   };
 
   return (
@@ -111,18 +122,29 @@ const UploadImage = () => {
           </>
         )}
 
-        <Button
-          onClick={handlePredict}
-          disabled={!file || loading}
-          className="mt-4"
-        >
-          {loading ? "Predicting..." : "Predict"}
-        </Button>
+        <div className="flex w-[100%] justify-around">
+          <Button
+            onClick={handlePredict}
+            disabled={!file || loading}
+            className="mt-4"
+          >
+            {loading ? "Predicting..." : "Predict"}
+          </Button>
+          {reset && (
+            <Button
+              onClick={handleReset}
+              disabled={!file || loading}
+              className="mt-4 bg-destructive"
+            >
+              {loading ? "Resetting..." : "Reset"}
+            </Button>
+          )}
+        </div>
 
         {result && (
           <div className="flex justify-around w-[100%]">
             <p className="text-md font-semibold text-center text-primary mt-4">
-              Prediction: {console.log(result)}
+              Prediction:
               <span className="text-muted-foreground">{result.prediction}</span>
             </p>
             <p className="text-md font-semibold text-center text-primary mt-4">
