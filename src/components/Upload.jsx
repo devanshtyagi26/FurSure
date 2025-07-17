@@ -8,8 +8,9 @@ import { predict } from "@/lib/predict";
 const UploadImage = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileName, setFileName] = useState("");
-  const [file, setFile] = useState(null); // ✅ define file state!
-  const [result, setResult] = useState(null); // ✅ no <string> stuff
+  const [file, setFile] = useState(null);
+  const [result, setResult] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleDragOver = (e) => {
@@ -28,6 +29,7 @@ const UploadImage = () => {
     if (droppedFile) {
       setFileName(droppedFile.name);
       setFile(droppedFile);
+      setPreview(URL.createObjectURL(droppedFile));
       setResult(null);
     }
   };
@@ -37,6 +39,7 @@ const UploadImage = () => {
     if (selectedFile) {
       setFileName(selectedFile.name);
       setFile(selectedFile);
+      setPreview(URL.createObjectURL(selectedFile));
       setResult(null);
     }
   };
@@ -48,7 +51,7 @@ const UploadImage = () => {
       const prediction = await predict(file);
       setResult(prediction);
     } catch (err) {
-      setResult("Prediction failed 💀");
+      setResult("Prediction failed");
       console.error(err);
     } finally {
       setLoading(false);
@@ -65,36 +68,47 @@ const UploadImage = () => {
       onDrop={handleDrop}
     >
       <CardContent className="flex flex-col items-center justify-center gap-4">
-        <svg
-          className="h-[7rem] fill-muted-foreground"
-          height="1em"
-          viewBox="0 0 640 512"
-        >
-          <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path>
-        </svg>
+        {file && preview ? (
+          <div className="flex flex-col justify-center items-center gap-2">
+            <img
+              src={preview}
+              alt="Uploaded Preview"
+              className="mt-4 max-h-64 rounded-lg object-contain"
+            />
+            {fileName && (
+              <p className="text-sm text-muted-foreground">
+                Selected file: <span className="font-medium">{fileName}</span>
+              </p>
+            )}
+          </div>
+        ) : (
+          <>
+            <svg
+              className="h-[7rem] fill-muted-foreground"
+              height="1em"
+              viewBox="0 0 640 512"
+            >
+              <path d="M144 480C64.5 480 0 415.5 0 336c0-62.8 40.2-116.2 96.2-135.9c-.1-2.7-.2-5.4-.2-8.1c0-88.4 71.6-160 160-160c59.3 0 111 32.2 138.7 80.2C409.9 102 428.3 96 448 96c53 0 96 43 96 96c0 12.2-2.3 23.8-6.4 34.6C596 238.4 640 290.1 640 352c0 70.7-57.3 128-128 128H144zm79-217c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l39-39V392c0 13.3 10.7 24 24 24s24-10.7 24-24V257.9l39 39c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-80-80c-9.4-9.4-24.6-9.4-33.9 0l-80 80z"></path>
+            </svg>
 
-        <p className="text-xl font-semibold text-muted-foreground">
-          Drag & drop your image here
-        </p>
-        <p className="text-muted-foreground">or</p>
+            <p className="text-xl font-semibold text-muted-foreground">
+              Drag & drop your image here
+            </p>
+            <p className="text-muted-foreground">or</p>
 
-        <label htmlFor="file-upload">
-          <Button asChild variant="outline">
-            <span>Browse file</span>
-          </Button>
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </label>
-
-        {fileName && (
-          <p className="text-sm text-muted-foreground">
-            Selected file: <span className="font-medium">{fileName}</span>
-          </p>
+            <label htmlFor="file-upload">
+              <Button asChild variant="outline">
+                <span>Browse file</span>
+              </Button>
+              <input
+                id="file-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+            </label>
+          </>
         )}
 
         <Button
