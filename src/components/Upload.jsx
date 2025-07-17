@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useCallback, useState, DragEvent } from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { predict } from "@/lib/predict";
 
 const UploadImage = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileName, setFileName] = useState("");
+  const [file, setFile] = useState(null); // ✅ define file state!
+  const [result, setResult] = useState(null); // ✅ no <string> stuff
+  const [loading, setLoading] = useState(false);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -20,18 +24,34 @@ const UploadImage = () => {
   const handleDrop = (e) => {
     e.preventDefault();
     setDragActive(false);
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      setFileName(file.name);
-      // You can call an upload function here
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFileName(droppedFile.name);
+      setFile(droppedFile);
+      setResult(null);
     }
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-      // You can call an upload function here
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFileName(selectedFile.name);
+      setFile(selectedFile);
+      setResult(null);
+    }
+  };
+
+  const handlePredict = async () => {
+    if (!file) return;
+    setLoading(true);
+    try {
+      const prediction = await predict(file);
+      setResult(prediction);
+    } catch (err) {
+      setResult("Prediction failed 💀");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,6 +95,35 @@ const UploadImage = () => {
           <p className="text-sm text-muted-foreground">
             Selected file: <span className="font-medium">{fileName}</span>
           </p>
+        )}
+
+        <Button
+          onClick={handlePredict}
+          disabled={!file || loading}
+          className="mt-4"
+        >
+          {loading ? "Predicting..." : "Predict"}
+        </Button>
+
+        {result && (
+          <div className="flex justify-around w-[100%]">
+            <p className="text-md font-semibold text-center text-primary mt-4">
+              Prediction: {console.log(result)}
+              <span className="text-muted-foreground">{result.prediction}</span>
+            </p>
+            <p className="text-md font-semibold text-center text-primary mt-4">
+              Confidence:{" "}
+              {result.prediction === "Cat" ? (
+                <span className="text-muted-foreground">
+                  {1 - result.confidence}
+                </span>
+              ) : (
+                <span className="text-muted-foreground">
+                  {result.confidence}
+                </span>
+              )}
+            </p>
+          </div>
         )}
       </CardContent>
     </Card>
