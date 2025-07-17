@@ -123,42 +123,63 @@ const UploadImage = () => {
         )}
 
         <div className="flex w-[100%] justify-around">
-          <Button
-            onClick={handlePredict}
-            disabled={!file || loading}
-            className="mt-4"
-          >
-            {loading ? "Predicting..." : "Predict"}
-          </Button>
+          {result === "Prediction failed" ? (
+            <></>
+          ) : (
+            <Button
+              onClick={handlePredict}
+              disabled={!file || loading}
+              className="mt-4"
+            >
+              {loading ? "Predicting..." : "Predict"}
+            </Button>
+          )}
           {reset && (
             <Button
               onClick={handleReset}
               disabled={!file || loading}
               className="mt-4 bg-destructive"
             >
-              {loading ? "Resetting..." : "Reset"}
+              Reset
             </Button>
           )}
         </div>
 
         {result && (
-          <div className="flex justify-around w-[100%]">
-            <p className="text-md font-semibold text-center text-primary mt-4">
-              Prediction:
-              <span className="text-muted-foreground">{result.prediction}</span>
-            </p>
-            <p className="text-md font-semibold text-center text-primary mt-4">
-              Confidence:{" "}
-              {result.prediction === "Cat" ? (
-                <span className="text-muted-foreground">
-                  {1 - result.confidence}
-                </span>
-              ) : (
-                <span className="text-muted-foreground">
-                  {result.confidence}
-                </span>
-              )}
-            </p>
+          <div className="flex flex-col items-center justify-center mt-4 w-full space-y-2">
+            {result === "Prediction failed" ? (
+              <>
+                <p className="text-md font-semibold text-destructive text-center">
+                  Prediction failed. Try again.
+                </p>
+                <Button
+                  onClick={handleReset}
+                  disabled={!file || loading}
+                  className="mt-4 bg-destructive"
+                >
+                  {loading ? "Resetting..." : "Reset"}
+                </Button>
+              </>
+            ) : (
+              <>
+                <p className="text-md font-semibold text-center text-primary">
+                  Prediction:
+                  <span className="ml-2 text-muted-foreground">
+                    {result.prediction}
+                  </span>
+                </p>
+                <p className="text-md font-semibold text-center text-primary">
+                  Confidence:
+                  <span className="ml-2 text-muted-foreground">
+                    {result.prediction === "Cat" ? (
+                      <>{(1 - result.confidence) * 100}%</>
+                    ) : (
+                      <>{result.confidence * 100}%</>
+                    )}
+                  </span>
+                </p>
+              </>
+            )}
           </div>
         )}
       </CardContent>
