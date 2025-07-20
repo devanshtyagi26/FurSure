@@ -1,37 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FurSure - Cat vs Dog Predictor
 
-## Getting Started
+![Demo](./public/demo/demo.gif)
 
-First, run the development server:
+> A full-stack Machine Learning app to classify whether an image is of a cat or a dog, using a trained CNN model, FastAPI backend, and a modern Next.js frontend.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🌟 Features
+
+- 📦 Upload any image and get an instant prediction (Cat or Dog)
+- ⚙️ Built with FastAPI + TensorFlow on the backend
+- 💅 Frontend built with Next.js and Tailwind CSS
+- 🔌 Clean UI/UX with image preview and smooth API integration
+- 🌐 Fully deployed on Netlify (frontend) and Render (backend)
+
+---
+
+## 🎯 Use Cases
+
+While the task sounds simple, the architecture and workflow mirror production-level ML systems:
+
+- **Educational Tool**: Great starter project for anyone learning computer vision, ML model deployment, or full-stack AI dev.
+- **Scalable Template**: Swap out the model and repurpose the system for:
+
+  - Skin disease detection
+  - Garbage classification
+  - Food or fashion item identification
+  - Wildlife monitoring apps
+
+- **Deployment Blueprint**: Perfect for understanding how to connect ML models with modern web stacks and host them affordably.
+
+---
+
+## 🧱 Tech Stack
+
+| Layer         | Tech                        |
+| ------------- | --------------------------- |
+| 🧠 Model      | TensorFlow / Keras (CNN)    |
+| 🐍 Backend    | FastAPI, Uvicorn            |
+| 🎨 Frontend   | Next.js, Tailwind CSS       |
+| ☁️ Deployment | Render (API), Netlify (Web) |
+
+---
+
+## 🧠 Model Training (Optional)
+
+The backend uses a pre-trained Keras CNN model. You can train your own with this rough structure:
+
+```python
+model = Sequential([
+    Conv2D(...),
+    MaxPooling2D(...),
+    Flatten(),
+    Dense(128, activation='relu'),
+    Dense(1, activation='sigmoid')
+])
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Trained on \~2,000 cat and dog images from Kaggle using binary crossentropy.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚔️ Challenges Faced
 
-## Learn More
+- Handling base64 encoded images from frontend to backend
+- CORS issues between Netlify ↔ Render
+- Keeping model inference time under free-tier limits
+- Smoothing user experience without lag or reloads
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 💡 Future Improvements
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 📸 **Live Camera Feed**: Real-time classification using webcam
+- 📱 **PWA Support**: Make the app installable and offline-ready
+- 🧠 **Transfer Learning**: Improve accuracy with MobileNetV2 or EfficientNet
+- 🐾 **Multi-Class Support**: Add more pet species or even breeds
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🙌 Acknowledgements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# FurSure
+- [TensorFlow](https://www.tensorflow.org/)
+- [FastAPI](https://fastapi.tiangolo.com/)
+- [Next.js](https://nextjs.org/)
+- [Kaggle Dogs vs Cats Dataset](https://www.kaggle.com/c/dogs-vs-cats)
+
+---
+
+## ✨ Author
+
+**Devansh Tyagi** [🐙 GitHub](https://github.com/devanshtyagi26) | [💼 LinkedIn](https://linkedin.com/in/tyagi-devansh)
