@@ -35,7 +35,7 @@ export default function Navbar() {
             Predict
           </Link>
           <Link
-            href="https://www.linkedin.com/posts/tyagi-devansh_onedaybuild-machinelearning-fastapi-activity-7349861243572133889-l4qn"
+            href="https://www.linkedin.com/posts/tyagi-devansh_machinelearning-nextjs-fastapi-activity-7352547815731990528-cKMI"
             target="_blank"
             className="text-sm font-medium hover:underline"
           >
